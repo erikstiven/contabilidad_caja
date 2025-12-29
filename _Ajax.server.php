@@ -245,6 +245,7 @@ function consultar( $aForm='' ){
 						$sumaCredito += $oIfx->f('dasi_cml_dasi');
 	
 						if ($i == 1){
+							$tipo = $oIfx->f('asto_tipo_mov');
 							$html.='<tr>
 										<td class="bg-info" colspan="8"> '.$oIfx->f('cact_cod_cact').' '.$oIfx->f('cact_nom_cact').' </td>
 									</tr>
@@ -256,6 +257,24 @@ function consultar( $aForm='' ){
 							$cuentaAnterior = $oIfx->f('dasi_cod_cuen');
 							$mesAnterior = $oIfx->f('mes');
 							$saldoAnterior = $oIfx->f('saldo_anterior');
+							if ($tipo != 'SA') {
+								$saldoCuenta = $saldoAnterior + ( $oIfx->f('dasi_dml_dasi') - $oIfx->f('dasi_cml_dasi') );
+								$html.='<tr>
+											<td> </td>
+											<td colspan="7"> '.$arrayMes[$mesAnterior].' </td>
+										</tr>
+										<tr>
+											<td> '.$oIfx->f('asto_fec_asto').' </td>
+											<td> '.$oIfx->f('asto_tipo_mov').' </td>
+											<td> '.$oIfx->f('asto_num_mayo').' </td>
+											<td> '.$oIfx->f('asto_ben_asto').' </td>
+											<td> '.$oIfx->f('dasi_det_asi').' </td>
+											<td style="text-align:right;"> '.number_format( round($oIfx->f('dasi_dml_dasi'),2),2,'.',',').' </td>
+											<td style="text-align:right;"> '.number_format( round($oIfx->f('dasi_cml_dasi'),2),2,'.',',').' </td>
+											<td style="text-align:right;"> '.number_format( round($saldoCuenta,2),2,'.',',').' </td>												
+										</tr>';
+								$saldoAnterior = $saldoCuenta;
+							}
 						} else {
 							$actual = $oIfx->f('cact_cod_cact');
 							$cuentaActual = $oIfx->f('dasi_cod_cuen');
